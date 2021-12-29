@@ -4,13 +4,12 @@
 
 #include <iostream>
 #include <fstream>
-#include <vector>
 
 #include "./token.hpp"
 
 class Lexer {
     public:
-        std::vector<char> source;
+        std::string source;
         int index = 0;
 
         char peek() {return source[index+1];}
@@ -23,15 +22,8 @@ class Lexer {
         Token *parseIdentifier();
         Token *scan();
 
-        Lexer(std::string filepath) {
-            std::ifstream file(filepath);
-
-            char token;
-            while (file >> std::noskipws >> token) {
-                this->source.push_back(token);
-            }
-            
-            this->source.push_back('\0');
+        Lexer(std::string source) {
+            this->source = source;
         }
 };
 

@@ -76,6 +76,7 @@ Token * Lexer::scan() {
         case '[': nTok(LBRACK, value);
         case ']': nTok(RBRACK, value);
         case ';': nTok(SEMI, value);
+        case '\0': nTok(EOS, value);
         default: printf("Err: Illegal character: %c, ASCII: %i\n", token, (int)token);
             exit(1);
     }
