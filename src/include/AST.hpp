@@ -4,12 +4,15 @@
 #include <iostream>
 #include <vector>
 
+#include "./token.hpp"
+
 #define AST_TYPES \
     a(AST_COMPOUND, "AST_COMPOUND") \
     a(AST_VAR_DEF, "AST_VAR_DEF") \
     a(AST_VAR, "AST_VAR") \
     a(AST_FUNC, "AST_FUNC") \
     a(AST_FUNC_CALL, "AST_FUNC_CALL") \
+    a(AST_BINOP, "AST_BINOP") \
     a(AST_ID, "AST_ID") \
     a(AST_INT, "AST_INT") \
     a(AST_STR, "AST_STR") \
@@ -36,6 +39,10 @@ class AST {
 
         eAST type;
         AST *value;
+        AST *right;
+        AST *left;
+
+        Token *op;
 
         int int_value;
         std::string str_value;

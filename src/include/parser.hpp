@@ -21,6 +21,7 @@ class Parser {
 
         void expect(eToken type);
 
+        AST *root;
         Lexer *lexer;
         Token *current;
 };

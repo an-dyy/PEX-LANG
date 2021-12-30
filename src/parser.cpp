@@ -34,6 +34,23 @@ AST *Parser::parseEXPR() {
             return expr;
         }
 
+        case OP_ADD:
+        case OP_SUB:
+        case OP_MUL:
+        case OP_DIV:
+        case OP_MOD: {
+            expr->type = AST_BINOP;
+            expr->left = this->root->compound.back();
+            expr->op = this->current;
+
+            this->lexer->advance();
+            this->current = this->lexer->scan();
+            this->root->compound.pop_back();
+
+            expr->right = this->parseEXPR();
+            return expr;
+        }
+
         default: std::cout << "Not an expression.";
             exit(1);
     }
@@ -77,6 +94,7 @@ AST *Parser::parseStatement() {
 
 AST *Parser::parse() {
     AST *root = new AST(AST_COMPOUND);
+    this->root = root;
 
     while (this->current->type != EOS) {
         root->compound.push_back(this->parseStatement());
@@ -87,8 +105,18 @@ AST *Parser::parse() {
     }
 
     for (const AST* child : root->compound) {
-        std::cout << AST_STRINGS[(int)child->type] << " ";
-        std::cout << child->value << std::endl;
+        if (child->type == AST_BINOP) {
+            std::cout << AST_STRINGS[(int)child->left->type] << " ";
+            std::cout << child->left->int_value << std::endl;
+            std::cout << TOKEN_STRINGS[(int)child->op->type] << std::endl;
+            std::cout << AST_STRINGS[(int)child->right->type] << " ";
+            std::cout << child->right->int_value << std::endl;
+        }
+        
+        else {
+            std::cout << AST_STRINGS[(int)child->type] << " ";
+            std::cout << child->value << std::endl;
+        }
     }
 
     return root;
