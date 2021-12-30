@@ -2,14 +2,18 @@
 #include <fstream>
 
 #include "include/PEX.hpp"
+#include "include/AST.hpp"
+#include "include/parser.hpp"
 #include "include/lexer.hpp"
 #include "include/token.hpp"
+
 
 std::string prompt() {
     std::string capture;
     std::cout << "PEX> ";
     std::getline(std::cin, capture);
 
+    capture.push_back('\0');
     return capture;
 }
 
@@ -57,10 +61,12 @@ int main(int argc, char *argv[]) {
             source.push_back(token);
         }
 
+        source.push_back('\0');
         file.close();
         
         Lexer *lexer = new Lexer(source);
-        pex_eval(lexer);
+        Parser *parser = new Parser(lexer);
+        AST* root = parser->parse();
     }
 
     return 0;
